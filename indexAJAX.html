@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX and XDK</title>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0;" />
+    <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>  
+    <script>
+        function doJSON1() {
+            $.getJSON('http://time.jsontest.com/?alloworigin=false&callback=?', function (data) {
+                alert(JSON.stringify(data))
+            });
+        }
+        function doJSON2() {
+            $.getJSON('http://time.jsontest.com/?alloworigin=true', function (data) {
+                alert(JSON.stringify(data))
+            });
+        }
+        function doJSON3() {
+            $.getJSON('http://time.jsontest.com/?alloworigin=false', function (data) {
+                alert(JSON.stringify(data))
+            });
+        }
+</script>
+<style>
+    body {font-family:arial;background-color:white}
+</style>    
+</head>
+<body>         
+    <h3>Get JSON with padding</h3>
+    <button onclick="doJSON1()">Get JSON</button>
+    <br><br><hr>
+    <h3>Get JSON with Access-Control-Allow-Origin header: *</h3>
+    <button onclick="doJSON2()">Get JSON</button>
+    <br><br><hr>
+    <h3>Get JSON with NO Access-Control-Allow-Origin header</h3>
+    <button onclick="doJSON3()">Get JSON</button>
+</body>
+</html>    
