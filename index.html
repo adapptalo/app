@@ -212,7 +212,7 @@
         var viewModel = kendo.observable({
                 artists: artistsDataSource
         });
-
+        setTimeout(function () {$(".km-indexedlistview").data("kendoMobileIndexedListView").refresh();}, 1);
 </script>
 <script>
     var app = new kendo.mobile.Application(document.body);
