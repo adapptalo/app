@@ -53,10 +53,10 @@ define(["jQuery", "kendo", "config", "utils"], function ($, kendo, config, utils
                 group: [{field: "FirstLetter"}],
                 schema: {
                         parse: function (data) {
-                                $.each(data, function (index, artist) {
-                                        artist.FirstLetter = artist.CERVESERA.substring(0,1).toUpperCase();
-                                        if(artist.FirstLetter.match(/\d/)) {
-                                                artist.FirstLetter = "#"
+                                $.each(data, function (index, artist2) {
+                                        artist2.FirstLetter = artist2.CERVESERA.substring(0,1).toUpperCase();
+                                        if(artist2.FirstLetter.match(/\d/)) {
+                                                artist2.FirstLetter = "#"
                                         }
                                 });
                                 return data;
