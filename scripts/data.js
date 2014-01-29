@@ -80,17 +80,17 @@ define(["jQuery", "kendo", "config", "utils"], function ($, kendo, config, utils
                         }
                 }
         }),
-        beersList: new kendo.data.DataSource(new DataSourceConfig(config.beersUrl, "CERVESERA", {
+        beersList: new kendo.data.DataSource(new DataSourceConfig(config.beersUrl2, "CERVESERA", {
             serverFiltering: true,
             serverSorting: true,
             serverGrouping: false,
             group: [{field: "FirstLetter"}],
             schema: {
                 parse: function (data) {
-                    $.each(data.value, function (index, artist) {
-                        artist.FirstLetter = artist.CERVESERA.substring(0,1).toUpperCase();
-                        if(artist.FirstLetter.match(/\d/)) {
-                            artist.FirstLetter = "#"
+                    $.each(data.value, function (index, artist3) {
+                        artist3.FirstLetter = artist3.CERVESERA.substring(0,1).toUpperCase();
+                        if(artist3.FirstLetter.match(/\d/)) {
+                            artist3.FirstLetter = "#"
                         }
                     });
                     return data;

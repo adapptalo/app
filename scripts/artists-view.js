@@ -3,7 +3,7 @@ define(["kendo", "data"], function (kendo, data) {
         viewModel: kendo.observable({
             artists: data.artistsList,
             beers: data.beers,
-            beersD:data.beersD
+            beersD:data.beersList
         })
     };
 });

@@ -10,6 +10,7 @@ define([], function () {
         genresUrl: serviceUrl + "/Genres",
         artistsUrl: serviceUrl + "/Artists",
         beersUrl:"http://localhost/BeerStore/getbeers2.php",
+        beersUrl2: "http://adapptalo.com/BBF/beers.json",
         albumsUrl: serviceUrl + "/Albums",
         loginUrl: serverUrl + "/Api/AccountApi",
         cartSubmitUrl: serverUrl + "/Api/CheckoutApi",
