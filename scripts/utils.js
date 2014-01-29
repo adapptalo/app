@@ -81,7 +81,7 @@ define([], function () {
         },
 
         showError: function (message, error) {
-            var errorMessage = message + (error === undefined ? "" : "\n" + error.status + ": " + error.statusText);
+            var errorMessage = message + (error === undefined ? "" : "XXX\n" + error.status + ": " + error.statusText);
             $("#error-view .message").text(errorMessage);
             $("#error-view").show().data().kendoMobileModalView.open();
         },
