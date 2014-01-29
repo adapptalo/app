@@ -48,7 +48,7 @@ define(["jQuery", "kendo", "config", "utils"], function ($, kendo, config, utils
         
         beers: new kendo.data.DataSource({
                 transport: {
-                        read: "beers.json"
+                        read: "http://adapptalo.com/BBF/beers.json"
                 },
                 group: [{field: "FirstLetter"}],
                 schema: {
