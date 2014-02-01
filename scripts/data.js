@@ -64,9 +64,7 @@ define(["jQuery", "kendo", "config", "utils"], function ($, kendo, config, utils
                 }
         }),
         beersD: new kendo.data.DataSource({
-                transport: {
-                        read: "beers.json"
-                },
+                data: artistsData,
                 group: [{field: "FirstLetter"}],
                 schema: {
                         parse: function (data) {

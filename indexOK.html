@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BBF 2014</title>
+        <meta charset="utf-8" />
+        <script src="cordova.js"></script>
+        <script src="Plugins/Child%20Browser/childbrowser.js"></script>
+        
+        <link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+        <link href="kendo/styles/kendo.indexedlistview.css" rel="stylesheet" />
+        <link href="styles/main.css" rel="stylesheet" />
+        <style>
+          h2{font-size: 13px;}
+          h3, h2, p {font-family: Tahoma;}
+          .km-touch-scrollbar{background-color: #ffffff}
+          .olControlAttribution{bottom: 0;margin-bottom: -100px;}
+          .beer_bg {
+                background: url("http://www.adapptalo.com/test/beerTexture.jpg") repeat-x scroll left top #FADE01;
+                min-height: 650px;
+                text-align: center;
+            }
+            .km-ios .km-view .km-content{background-color:transparent;background-image: none;}
+            #locate {position:absolute;z-index: 900;bottom: 0;height: 50px;}
+            #track {position:absolute;z-index: 9;bottom: 0;display: none;}         
+        </style>
+        <style type="text/css">
+            span.logo{background-image: url("http://www.barcelonabeerfestival.com/imatges2014/logo2014.png");}
+            #beer-view .km-ios ,#beer-view .km-insetcontent{background: url("http://www.sandpiperbeacon.com/thunderbeach/why-stay/beer.png")no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;}
+            .item-list img, #details img{margin-top: -5px;background-color: whitesmoke}
+            #info {float:left;}
+            .km-list > li > img {height:40px; width:40px;float:left; margin-right: 5px;}
+            /*#body { width: 300px; height: 450px; }*/
+
+        </style>
+        <style type="text/css">
+                .km-ios .km-list > li{font-size: 13px;background-image: url("http://demos.kendoui.com/content/shared/images/patterns/pattern8.png");}
+                .km-ios .km-group-title {
+                    background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.45) 6%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(100, 100, 100, 0)), url("http://demos.kendoui.com/content/shared/images/patterns/pattern4.png");
+                    color: #974D2E;
+                    font-size: 1.4em;
+                    font-weight: normal;
+                }
+                .km-ios7 .km-list > li:last-child {
+                    box-shadow: 0 -1px 0 rgba(180, 180, 180, 0.5) inset;
+                }
+                #beers-view .km-listview .km-list {
+                    border-top-color: #dcbe87;
+                    background-image: url("http://demos.kendoui.com/content/shared/images/patterns/pattern8.png");
+                }
+                #beers-view .km-navbar, .km-wp-light #beers-view .km-navbar, .km-wp-dark #beers-view .km-navbar, #beers-view .km-content .km-button {
+                    background: url("http://demos.kendoui.com/content/shared/images/patterns/pattern9.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+                    color: #FFFFFF;
+                }
+                #custom-listview .item-title, #custom-listview .item-info {
+                    color: #4C2A1B;
+                }
+                #custom-listview .item-title {}
+                #custom-listview .item-info { color:#974D2E; }
+                #beers-view .km-listview .km-list{  background-color: #007ee9; border-top-color: #DCBE87;}
+                .item-list img, #details img {
+                    border-radius: 5px;
+                    box-shadow: 0 2px 3px #333333;
+                    float: left;
+                    height: 57px;
+                    margin-bottom: 3px;
+                    margin-left: 11px;
+                    margin-right: 1rem;
+                    width: 57px;
+                }
+                .item-list img, #details img {
+                    background-color: #F5F5F5;
+                    margin-top: 0px;
+                }
+
+        </style>
+        
+    </head>
+    <body id="body">
+        <script src="http://demos.kendoui.com/content/shared/js/products.js"></script>
+    
+         <!--
+         <div data-title="BeerList" data-role="view" id="beers-view" data-url="/" data-layout="beer-layout" data-model="app.artistsView.viewModel" >
+            <ul id="custom-listview" 
+                class="item-list"
+                data-role="indexedlistview" 
+                data-click="listViewClick" 
+                data-bind="source: beers" 
+                data-template="beers-list-template"
+
+                data-fixed-headers="true">
+
+            </ul>
+
+        </div>
+        -->
+        <div id="list-view" data-layout="beer-layout" data-role="view" data-init="mobileListViewLocalFiltering" data-title="Products">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                    <a data-align="right" data-role="button" class="nav-button" href="#index">Index</a>
+                </div>
+            </header>
+
+            <ul id="local-filterable-listview"></ul>
+        </div>
+
+        <script type="text/x-kendo-tmpl" id="mobile-listview-filtering-template">
+            <div class="product">
+                <h3>#:ProductName#</h3>
+                <p>#:kendo.toString(UnitPrice, "c")#</p>
+            </div>
+        </script>
+
+        <script>
+            function mobileListViewLocalFiltering() {
+                var dataSource = new kendo.data.DataSource({
+                    data: products,
+                    schema: {
+                        model: {
+                            fields: {
+                                ProductName: { type: "string" },
+                                UnitPrice: { type: "number" },
+                                UnitsInStock: { type: "number" },
+                                Discontinued: { type: "boolean" }
+                            }
+                        }
+                    }
+                });
+
+                $("#local-filterable-listview").kendoMobileListView({
+                    dataSource: dataSource,
+                    template: $("#mobile-listview-filtering-template").text(),
+                    filterable: {
+                        field: "ProductName",
+                        operator: "startswith"
+                    },
+                    virtualViewSize: 100, // this configuration is needed to determine the items displayed, since the datasource does not (and should not) have paging set.
+                    endlessScroll: true
+                });
+            }
+        </script>
+         <!-- Beer Views -->
+         <div data-title="BeerList" data-role="view" id="beers-view" data-url="/" data-layout="beer-layout" data-model="app.artistsView.viewModel" >
+            <ul id="custom-listview" 
+                class="item-list"
+                data-role="indexedlistview" 
+                data-click="listViewClick" 
+                data-bind="source: beers" 
+                data-template="beers-list-template"
+
+                data-fixed-headers="true">
+
+            </ul>
+
+        </div>
+         <script id="beers-list-template" type="text/x-kendo-template">
+             <a href="\#beer-view?field=GenreId&operator=eq&value=#=B_Id#&title=#:encodeURIComponent(CERVESERA).replace("'", "%27")#">
+                <div class="beer-text">
+                    <img class="item-photo" src="Images/beers/${IMAGEN}" />
+                    <h3 style="margin-top:10px; margin-bottom:0px" class="item-title">#=CERVESERA#</h3>
+                    <p style="margin-top:0px; margin-bottom:10px" class="item-info">#=CERVESA#<br><i style="margin-top:0px;">Tipo:</i></p>
+                </div>
+                 <!-- <img class="item-photo" src="content/beers/${IMAGEN}" />#=CERVESERA#<br>#=CERVESA# -->
+             </a>
+         </script>
+       
+          <script id="beers-detail-template" type="text/x-kendo-template">
+                <div style="background-color: wheat;height: 300px" class="beer-details">
+                    <img class="item-photo" src="Images/beers/${IMAGEN}" />
+                    <h3 style="margin-top:10px; margin-bottom:0px" class="item-title">#=CERVESERA#</h3>
+                    <p style="margin-top:0px; margin-bottom:10px" class="item-info">#=CERVESA#<br><i style="margin-top:0px;">Tipo:</i></p>
+                </div>
+                 <!-- <img class="item-photo" src="content/beers/${IMAGEN}" />#=CERVESERA#<br>#=CERVESA# -->
+   
+         </script>
+         
+        <div data-role="layout" data-id="beer-layout" data-init="app.homeLayout.init" data-show="app.homeLayout.show">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span class="logo" data-role="view-title"></span>
+                </div>
+            </header>
+
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#list-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+        </div>
+        
+        <div data-role="view" id="beer-view" data-layout="base-layout" data-model="app.albumsView.viewModel" data-show="app.albumsView.show" data-transition="slide:left" style="display: none;">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <a class="nav-button" data-align="left" data-role="backbutton">Back</a>
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+
+            <ul id="beer-detail" data-role="listview" data-bind="source: beers" data-auto-bind="false" data-template="beers-detail-template" data-style="inset" data-endless-scroll="true"></ul>
+        </div>
+        <!-- Home Views -->
+
+        <div data-role="view" id="genres-view" data-layout="home-layout" data-title="Albums" data-model="app.genresView.viewModel" data-show="app.genresView.onShow">
+            <ul data-role="listview" data-bind="source: genres" data-template="genre-list-template" data-style="inset"></ul>
+        </div>
+
+        <div data-role="view" id="artists-view" data-layout="home-layout" data-title="Albums" data-model="app.artistsView.viewModel" class="km-insetcontent" style="display: none;">
+            <ul data-role="indexedlistview" data-bind="source: artists" data-template="artist-list-template" data-fixed-headers="true"></ul>
+        </div>
+        
+        <div data-role="view" id="albums-view" data-layout="base-layout" data-model="app.albumsView.viewModel" data-show="app.albumsView.show" data-transition="slide:left" style="display: none;">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <a class="nav-button" data-align="left" data-role="backbutton">Back</a>
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+
+            <ul id="albums-listview" data-role="listview" data-bind="source: albums" data-auto-bind="false" data-template="album-list-template" data-style="inset" data-endless-scroll="true"></ul>
+        </div>
+
+        <div data-role="layout" data-id="home-layout" data-init="app.homeLayout.init" data-show="app.homeLayout.show">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                </div>
+                <ul class="select-group">
+                    <li data-target="#genres-view">Genres</li>
+                    <li data-target="#artists-view">Artists</li>
+                </ul>
+            </header>
+
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#beers-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="layout" data-id="home-layout" data-init="app.homeLayout.init" data-show="app.homeLayout.show" data-platform="android">
+            <div data-role="header">
+                <div data-role="navbar">
+                    <div class="app-icon" data-align="left"></div>
+                    <span data-role="view-title"></span>
+                    <div data-align="right" class="action-buttons">
+                        <a data-role="button" href="#search-view" data-icon="search"></a>
+                        <a data-role="button" href="#cart-view" data-icon="cart"></a>
+                        <a data-role="button" href="#popover-action-overflow" data-rel="popover" data-icon="action-overflow"></a>
+                    </div>
+                </div>
+                <div data-role="tabstrip">
+                    <a href="#genres-view">Genres</a>
+                    <a href="#artists-view">Artists</a>
+                </div>
+            </div>
+
+            <div data-role="popover" id="popover-action-overflow" data-popup='{"height": 110, "width": 125}'>
+                <div data-role="view" data-title="People">
+                    <ul data-role="listview" data-click="app.homeLayout.navigate">
+                        <li data-target="#account-view">Account</li>
+                        <li data-target="#about-view">About</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Search Views -->
+
+        <div data-role="view" id="search-view" data-layout="search-layout" data-title="Search" data-init="app.searchView.init" data-show="app.searchView.show" style="display: none;">
+            <ul id="search-listview" data-role="listview" data-bind="source: results" data-template="album-list-template" data-style="inset" data-endless-scroll="true" data-auto-bind="false"></ul>
+        </div>
+
+        <div data-role="layout" data-id="search-layout" data-show="app.baseLayout.show">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-text" placeholder="Album title or artist" />
+                    <a data-role="button" data-icon="search" data-click="app.searchView.submitSearch"></a>
+                </div>
+            </header>
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#beers-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="layout" data-id="search-layout" data-platform="android" data-show="app.baseLayout.show">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <a class="nav-button" data-align="left" data-role="backbutton"></a>
+                    <input type="text" class="search-text" placeholder="Album title or artist" />
+                    <div data-align="right" class="action-buttons">
+                        <a data-role="button" data-icon="search" data-click="app.searchView.submitSearch"></a>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+
+        <!-- Cart Checkout Views -->
+
+        <div data-role="view" id="cart-view" data-layout="cart-layout" data-title="Cart" data-model="app.cartView.viewModel" data-init="app.cartView.init" style="display: none;">
+            <header data-role="header" class="cart-header">
+                <div data-role="navbar">
+                    <a class="nav-button" data-align="left" data-role="backbutton" data-bind="visible: isAndroid"></a>
+                    <span data-role="view-title"></span>
+                    <a data-role="button" href="#checkout-view" data-align="right" data-bind="visible: cartHasItems">Checkout</a>
+                </div>
+                <h3>Swipe to Remove Item</h3>
+                <h1>TOTAL: <span class="total" data-bind="text: cart.aggregates.formattedTotal"></span></h1>
+            </header>
+
+            <ul data-role="listview" data-bind="source: items" data-template="cart-list-template" data-style="inset"></ul>
+        </div>
+        
+        <div data-role="view" id="checkout-view" data-layout="base-layout" data-title="Checkout" data-model="app.checkoutView.viewModel" data-before-show="app.checkoutView.beforeShow" data-transition="slide:left" style="display: none;">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <a class="nav-button" data-align="left" data-role="backbutton">Cart</a>
+                    <span data-role="view-title"></span>
+                    <div data-role="button" data-align="right" data-bind="click: submit">Submit</div>
+                </div>
+            </header>
+            
+            <section class="validate" data-role="validator">
+                <ul data-role="listview">
+                    <li>
+                        First Name
+                        <input type="text" name="firstName" placeholder="First Name" data-bind="value: firstName" pattern=".{0,160}" required validationmessage="Required" />
+                    </li>
+                    <li>
+                        Last Name
+                        <input type="text" name="lastName" placeholder="Last Name" data-bind="value: lastName" pattern=".{0,160}" required validationmessage="Required" />
+                    </li>
+                    <li>
+                        Address
+                        <input type="text" name="address" placeholder="Address" data-bind="value: address" pattern=".{3,70}" required validationmessage="Required" />
+                    </li>
+                    <li>
+                        City
+                        <input type="text" name="city" placeholder="City" data-bind="value: city" pattern=".{0,40}" required validationmessage="Required"/>
+                    </li>
+                    <li>
+                        State
+                        <input type="text" name="state" placeholder="State" data-bind="value: state" pattern=".{0,40}" required validationmessage="Required"/>
+                    </li>
+                    <li>
+                        Postal Code
+                        <input type="text" name="zip" placeholder="Postal Code" data-bind="value: zip" pattern=".{5,10}" required validationmessage="Required"/>
+                    </li>
+                    <li>
+                        Country
+                        <input type="text" name="country" placeholder="Country" data-bind="value: country" pattern=".{0,40}" required validationmessage="Required"/>
+                    </li>
+                    <li>
+                        Phone
+                        <input type="text" name="phone" placeholder="Phone" data-bind="value: phone" pattern=".{0,24}" required validationmessage="Required"/>
+                    </li>
+                    <li>
+                        Email
+                        <input type="text" name="email" placeholder="Email Address" data-bind="value: email" pattern=".+@.+\..{2,}" required validationmessage="Required"/>
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <div data-role="view" id="checkout-complete-view" data-layout="checkout-complete-layout" data-title="Order Complete" data-model="app.checkoutView.viewModel" data-transition="slide:left" style="display: none;">
+            <h1 class="thank-you">Thank You!</h1>
+        </div>
+
+        <div data-role="layout" data-id="cart-layout" data-show="app.cartView.layoutShow" data-platform="ios">
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#beers-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="layout" data-id="checkout-complete-layout" data-show="app.baseLayout.show">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#beers-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="layout" data-id="checkout-complete-layout" data-show="app.baseLayout.show" data-platform="android">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <div class="app-icon" data-align="left"></div>
+                    <span data-role="view-title"></span>
+                    <div data-align="right" class="action-buttons">
+                        <a data-role="button" href="#home-view" data-icon="home"></a>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+
+        <!-- Account Views -->
+
+        <div data-role="view" id="account-view" data-layout="account-layout" data-title="Account" style="display: none;" data-model="app.accountView.viewModel" data-before-show="app.accountView.beforeShow" data-show="app.accountView.accountViewShow">
+            <ul id="order-history-list" class="order-history-list"></ul>
+        </div>
+
+        <div data-role="view" id="login-view" data-layout="base-layout" data-title="Log In" style="display: none;" data-model="app.accountView.viewModel" data-init="app.accountView.loginInit">
+            <p>For demonstration purposes you can register a new username, or use:</p>
+            <ul>
+                <li><strong>Username:</strong> owner</li>
+                <li><strong>Password:</strong> p@ssword123</li>
+            </ul>
+
+            <input type="text" placeholder="Username" data-bind="value: loginUsername" />
+            <input type="password" placeholder="Password" data-bind="value: loginPassword" />
+            <div type="button" data-role="button" data-bind="click: login">Log In</div>
+            <a href="#register-view" data-role="button">Register</a>
+        </div>
+        
+        <div data-role="view" id="register-view" data-layout="base-layout" data-title="Create Account" style="display: none;" data-model="app.accountView.viewModel">
+            <input type="text" placeholder="Username" data-bind="value: registerUsername" />
+            <input type="password" placeholder="Password" data-bind="value: registerPassword" />
+            <input type="password" placeholder="Confirm Password" data-bind="value: registerPasswordRetyped" />
+            <input type="button" data-role="button" value="Register" data-bind="click: register" />
+        </div>
+
+        <div data-role="layout" data-id="account-layout" data-show="app.accountView.layoutShow">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                    <span data-role="button" data-bind="click: logout" data-align="right">Log Off</span>
+                </div>
+                <h2><span data-bind="text: userName" class="user-name"></span>'s Order History</h2>
+            </header>
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#beers-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+
+            <div data-role="popover" id="popover-account-overflow" data-popup='{"height": 55, "width": 125}'>
+                <div data-role="view" data-title="People">
+                    <ul data-role="listview" data-click="app.accountView.action">
+                        <li data-action="logout">Log Off</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="layout" data-id="account-layout" data-show="app.accountView.layoutShow" data-platform="android">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <a class="nav-button" data-align="left" data-role="backbutton"></a>
+                    <span data-role="view-title"></span>
+                    <div data-align="right" class="action-buttons">
+                        <a data-role="button" href="#popover-account-overflow" data-rel="popover" data-icon="action-overflow"></a>
+                    </div>
+                </div>
+                <h2><span data-bind="text: userName" class="user-name"></span>'s Order History</h2>
+            </header>
+        </div>
+
+
+        <!-- About Views -->
+
+        <div data-role="view" id="about-view" data-layout="about-layout" data-title="About" data-show="initMap" data-stretch="true" data-model="app.aboutView.viewModel" style="display: none;">
+            <img style="position:fixed; left: 20%;z-index: 99" src="http://www.barcelonabeerfestival.com/imatges2014/logo2014.png"/>
+            <!--<h1>8,9 i 10<br>Març 2014</h1>
+            <p>CÚPULA LAS ARENAS</p>-->
+                    
+            <div id="mapwrap" data-role="content">
+                <div id="map" class="smallmap">
+                <button id="locate">Localizame!!</button>
+                <input type="checkbox" name="track" id="track"></div>
+            </div>
+            <div id="info" style="height: 30px;text-align: center; /*background-color: #ff0000;*/display:none;">
+                    <h2 class="item-title">8,9 i 10</h3>
+                    <h3 class="item-title">Mar� 2014</h3>
+                   <p class="item-info">C�PULA LAS ARENAS</p>
+            </div>
+            
+
+        </div>
+
+        <div data-role="layout" data-id="about-layout" data-show="app.baseLayout.show">
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#beers-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="layout" data-id="about-layout" data-platform="android" data-show="app.baseLayout.show">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <a href="#genres-view" class="nav-button" data-align="left" data-role="backbutton"></a>
+                    <span data-role="view-title"></span>
+                    <div data-align="right" class="action-buttons">
+                        <a data-role="button" href="#home-view" data-icon="home"></a>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+
+        <!-- Error Views -->
+
+        <div data-role="modalview" id="error-view" style="display: none; width: 95%; height: 90%;">
+            <div data-role="header">
+                <div data-role="navbar">
+                    <span>Error</span>
+                    <a data-click="app.closeErrorModal" data-role="button" data-align="right">Close</a>
+                </div>
+            </div>
+            
+            <div class="message"></div>
+        </div>
+
+
+        <!-- Shared Layouts -->
+
+        <div data-role="layout" data-id="base-layout" data-show="app.baseLayout.show">
+            <div data-role="footer">
+                <div data-role="tabstrip">
+                    <a href="#beers-view" data-icon="globe">BeerList</a>
+                    <a href="#search-view" data-icon="search">Search</a>
+                    <a href="#cart-view" data-icon="cart">Cart<span class="cart-badge km-badge" style="display: none;"></span></a>
+                    <a href="#account-view" data-icon="contacts">Account</a>
+                    <a href="#about-view" data-icon="about">About</a>
+                </div>
+            </div>
+        </div>
+
+        <div data-role="layout" data-id="base-layout" data-show="app.baseLayout.show" data-platform="android">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <a class="nav-button" data-align="left" data-role="backbutton"></a>
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+        </div>
+
+
+        <!-- Templates -->
+
+        <script id="genre-list-template" type="text/x-kendo-template">
+            <a href="\#albums-view?field=GenreId&operator=eq&value=#=GenreId#&title=#:encodeURIComponent(Name).replace("'", "%27")#">#=Name#</a>
+        </script>
+
+        <script id="artist-list-template" type="text/x-kendo-template">
+            <a href="\#albums-view?field=ArtistId&operator=eq&value=#=ArtistId#&title=#:encodeURIComponent(Name).replace("'", "%27")#">#=Name#</a>
+        </script>
+
+        <script id="album-list-template" type="text/x-kendo-template">
+            <img class="album-art" data-bind="attr: {src: albumArtUrl}" />
+            <div class="album-cart" data-role="button" data-bind="click: onAddToCart"><span data-bind="text: qtyInCart, attr: {class: buttonClasses}"></span><span class="km-icon km-cart"></span></div>
+            <h1 class="album-title" data-bind="text: Title"></h1>
+            <h2 class="album-artist" data-bind="text: Artist.Name"></h2>
+            <span class="album-price" data-bind="text: albumPrice"></span>
+        </script>
+
+        <script id="artist-filter-template" type="text/x-kendo-template">
+            <a href="\#artists-view?value=#=data#" id="#=data#">#=data#</a>
+        </script>
+
+        <script id="cart-list-template" type="text/x-kendo-template">
+            <div data-role="touch" data-enable-swipe="1" data-swipe="app.cartView.onToggleDeleteMode" data-hold="app.cartView.onToggleDeleteMode">
+                <div class="qty-and-price">
+                    <strong data-bind="invisible: deleteMode">Qty</strong>
+                    <input type="number" data-bind="value: qty, invisible: deleteMode" min="1" max="99" />
+                    <span class="cart-delete-button" data-role="button" data-click="app.cartView.onRemove" data-bind="visible: deleteMode" data-icon="trash"></span>
+                </div>
+                <img class="album-art" data-bind="attr: {src: albumArtUrl}" />
+                <h1 class="album-title" data-bind="text: album.Title"></h1>
+                <h2 class="album-artist" data-bind="text: album.Artist.Name"></h2>
+                <span class="album-price" data-bind="text: albumPrice"></span>
+                <div class="subtotal">Subtotal: <span data-bind="text: albumSubtotal"></span></div>
+            </div>
+        </script>
+
+        <script id="order-history-header-template" type="text/x-kendo-template">
+            <span>Order\# #=data.items[0].OrderId#</span>
+            <span>#=app.accountView.calcOrderTotal(data.items)#</span>
+            <span>#=kendo.toString(data.items[0].OrderDate, "g")#</span>
+        </script>
+
+        <script id="order-history-template" type="text/x-kendo-template">
+            <div>#=Title#</div>
+            <div>#=Quantity# at #=kendo.toString(UnitPrice, "c")# each</div>
+        </script>
+
+
+        <!-- Scripts -->
+
+        <script data-main="scripts/main.js" src="scripts/require.js"></script>
+        <script type="text/javascript">
+        var artistsData = [{"ArtistId":1,"Name":"65daysofstatic"},{"ArtistId":2,"Name":"Aaron Copland & London Symphony Orchestra"},{"ArtistId":4,"Name":"Above & Beyond"},{"ArtistId":5,"Name":"Above the Fold"},{"ArtistId":8,"Name":"Adicts"},{"ArtistId":11,"Name":"Aisha Duo"},{"ArtistId":12,"Name":"Al di Meola"},{"ArtistId":14,"Name":"Alanis Morissette"},{"ArtistId":16,"Name":"Alice in Chains"},{"ArtistId":17,"Name":"Alison Krauss"},{"ArtistId":18,"Name":"Amon Amarth"},{"ArtistId":19,"Name":"Amon Tobin"},{"ArtistId":20,"Name":"Amr Diab"},{"ArtistId":23,"Name":"Anthrax"},{"ArtistId":28,"Name":"Arcade Fire"},{"ArtistId":30,"Name":"Bad Religion"},{"ArtistId":31,"Name":"Barenaked Ladies"},{"ArtistId":33,"Name":"Bee Gees"},{"ArtistId":34,"Name":"Before the Dawn"},{"ArtistId":40,"Name":"BL\u00d8F"},{"ArtistId":41,"Name":"Blues Traveler"},{"ArtistId":46,"Name":"Burial"},{"ArtistId":47,"Name":"Butch Walker & The Black Widows"},{"ArtistId":49,"Name":"Cake"},{"ArtistId":51,"Name":"Carly Rae Jepsen"},{"ArtistId":52,"Name":"Carreras, Pavarotti, Domingo"},{"ArtistId":54,"Name":"Cayouche"},{"ArtistId":56,"Name":"Chicago "},{"ArtistId":65,"Name":"Coldplay"},{"ArtistId":67,"Name":"Crosby, Stills, Nash, and Young"},{"ArtistId":68,"Name":"Daft Punk"},{"ArtistId":69,"Name":"Danielson Famile"},{"ArtistId":70,"Name":"David Bowie"},{"ArtistId":72,"Name":"David Guetta"},{"ArtistId":75,"Name":"Def Leppard"},{"ArtistId":76,"Name":"Deftones"},{"ArtistId":78,"Name":"Deva Premal"},{"ArtistId":79,"Name":"Dio"},{"ArtistId":81,"Name":"Dolly Parton"},{"ArtistId":83,"Name":"Dr. Dre"},{"ArtistId":85,"Name":"Dream Theater"},{"ArtistId":86,"Name":"Duck Sauce"},{"ArtistId":87,"Name":"Earl Scruggs"},{"ArtistId":91,"Name":"Eminem"},{"ArtistId":93,"Name":"Enya"},{"ArtistId":94,"Name":"Epica"},{"ArtistId":95,"Name":"Eric B. and Rakim"},{"ArtistId":100,"Name":"Filter"},{"ArtistId":102,"Name":"Four Tet"},{"ArtistId":106,"Name":"Garbage"},{"ArtistId":112,"Name":"Guns N' Roses"},{"ArtistId":114,"Name":"In This Moment"},{"ArtistId":116,"Name":"INXS"},{"ArtistId":117,"Name":"Iron Maiden"},{"ArtistId":118,"Name":"Jagjit Singh"},{"ArtistId":122,"Name":"Jimmy Buffett"},{"ArtistId":123,"Name":"Jimmy Smith"},{"ArtistId":125,"Name":"John Digweed"},{"ArtistId":126,"Name":"John Mayer"},{"ArtistId":129,"Name":"Journey"},{"ArtistId":132,"Name":"Justice"},{"ArtistId":134,"Name":"King Crimson"},{"ArtistId":136,"Name":"LCD Soundsystem"},{"ArtistId":137,"Name":"Le Tigre"},{"ArtistId":138,"Name":"Led Zeppelin"},{"ArtistId":142,"Name":"Limp Bizkit"},{"ArtistId":143,"Name":"Linkin Park"},{"ArtistId":144,"Name":"Live"},{"ArtistId":145,"Name":"Lokua Kanza"},{"ArtistId":147,"Name":"Los Tigres del Norte"},{"ArtistId":150,"Name":"Lura"},{"ArtistId":154,"Name":"Mark Knopfler"},{"ArtistId":156,"Name":"Massive Attack"},{"ArtistId":158,"Name":"Megadeth"},{"ArtistId":160,"Name":"Melanie Fiona"},{"ArtistId":162,"Name":"Metallica"},{"ArtistId":163,"Name":"M-Flo"},{"ArtistId":164,"Name":"Michael Bolton"},{"ArtistId":166,"Name":"Miles Davis"},{"ArtistId":168,"Name":"Mobile"},{"ArtistId":169,"Name":"Modest Mouse"},{"ArtistId":172,"Name":"Mumford & Sons"},{"ArtistId":173,"Name":"Munkle"},{"ArtistId":176,"Name":"New York Dolls"},{"ArtistId":177,"Name":"Nick Cave and the Bad Seeds"},{"ArtistId":179,"Name":"Nine Inch Nails"},{"ArtistId":180,"Name":"Nirvana"},{"ArtistId":181,"Name":"Norah Jones"},{"ArtistId":182,"Name":"Nujabes"},{"ArtistId":184,"Name":"Oasis"},{"ArtistId":186,"Name":"Opeth"},{"ArtistId":189,"Name":"Ozzy Osbourne"},{"ArtistId":190,"Name":"Paddy Casey"},{"ArtistId":192,"Name":"Papa Wemba"},{"ArtistId":194,"Name":"Paul Oakenfold"},{"ArtistId":195,"Name":"Paul Van Dyk"},{"ArtistId":196,"Name":"Pearl Jam"},{"ArtistId":197,"Name":"Pet Shop Boys"},{"ArtistId":198,"Name":"Pink Floyd"},{"ArtistId":199,"Name":"Plug"},{"ArtistId":200,"Name":"Porcupine Tree"},{"ArtistId":201,"Name":"Portishead"},{"ArtistId":202,"Name":"Prince"},{"ArtistId":203,"Name":"Projected"},{"ArtistId":204,"Name":"PSY"},{"ArtistId":205,"Name":"Public Enemy"},{"ArtistId":206,"Name":"Queen"},{"ArtistId":207,"Name":"Queensr\u00ffche"},{"ArtistId":208,"Name":"R.E.M."},{"ArtistId":209,"Name":"Radiohead"},{"ArtistId":210,"Name":"Rancid"},{"ArtistId":212,"Name":"Raunchy"},{"ArtistId":214,"Name":"Rick Ross"},{"ArtistId":215,"Name":"Robert James"},{"ArtistId":218,"Name":"Run DMC"},{"ArtistId":219,"Name":"Rush"},{"ArtistId":221,"Name":"Sara Tavares"},{"ArtistId":222,"Name":"Sarah Brightman"},{"ArtistId":227,"Name":"Sheryl Crow"},{"ArtistId":230,"Name":"Skrillex"},{"ArtistId":232,"Name":"Slayer"},{"ArtistId":237,"Name":"Stevie Ray Vaughan"},{"ArtistId":238,"Name":"Sting"},{"ArtistId":239,"Name":"Stone Temple Pilots"},{"ArtistId":240,"Name":"Styx"},{"ArtistId":241,"Name":"Sufjan Stevens"},{"ArtistId":244,"Name":"T&N"},{"ArtistId":245,"Name":"Talking Heads"},{"ArtistId":246,"Name":"Tears For Fears"},{"ArtistId":247,"Name":"Ted Nugent"},{"ArtistId":252,"Name":"The Beatles"},{"ArtistId":253,"Name":"The Black Crowes"},{"ArtistId":254,"Name":"The Black Keys"},{"ArtistId":255,"Name":"The Carpenters"},{"ArtistId":256,"Name":"The Cat Empire"},{"ArtistId":258,"Name":"The Cure"},{"ArtistId":259,"Name":"The Decemberists"},{"ArtistId":261,"Name":"The Eagles of Death Metal"},{"ArtistId":262,"Name":"The Go! Team"},{"ArtistId":263,"Name":"The Head and the Heart"},{"ArtistId":264,"Name":"The Jezabels"},{"ArtistId":266,"Name":"The Lumineers"},{"ArtistId":267,"Name":"The Offspring"},{"ArtistId":270,"Name":"The Prodigy"},{"ArtistId":272,"Name":"The Rubberbandits"},{"ArtistId":273,"Name":"The Smashing Pumpkins"},{"ArtistId":274,"Name":"The Stone Roses"},{"ArtistId":275,"Name":"The Who"},{"ArtistId":276,"Name":"Them Crooked Vultures"},{"ArtistId":277,"Name":"TheStart"},{"ArtistId":278,"Name":"Thievery Corporation"},{"ArtistId":279,"Name":"Ti\u00ebsto"},{"ArtistId":282,"Name":"Tool"},{"ArtistId":283,"Name":"Tori Amos"},{"ArtistId":284,"Name":"Trampled By Turtles"},{"ArtistId":285,"Name":"Trans-Siberian Orchestra"},{"ArtistId":286,"Name":"Tygers of Pan Tang"},{"ArtistId":287,"Name":"U2"},{"ArtistId":289,"Name":"Uh Huh Her "},{"ArtistId":290,"Name":"Van Halen"},{"ArtistId":293,"Name":"Venus Hum"},{"ArtistId":294,"Name":"Vicente Fernandez"},{"ArtistId":296,"Name":"Weezer"},{"ArtistId":297,"Name":"Weird Al"},{"ArtistId":298,"Name":"Wendy Carlos"},{"ArtistId":300,"Name":"Yano"},{"ArtistId":302,"Name":"Yes"},{"ArtistId":305,"Name":"\u05d0\u05e8\u05d9\u05e7 \u05d0\u05d9\u05e0\u05e9\u05d8\u05d9\u05d9\u05df"}];
+
+        var artistsDataSource = new kendo.data.DataSource({
+                data: artistsData,
+                group: [{field: "FirstLetter"}],
+                schema: {
+                        parse: function (data) {
+                                $.each(data, function (index, artist) {
+                                        artist.FirstLetter = artist.Name.substring(0,1).toUpperCase();
+                                        if(artist.FirstLetter.match(/\d/)) {
+                                                artist.FirstLetter = "#"
+                                        }
+                                });
+                                return data;
+                        }
+                }
+        });
+
+        var viewModel2 = kendo.observable({
+                artists2: artistsDataSource
+        });
+        setTimeout(function () {$(".km-indexedlistview").data("kendoMobileIndexedListView").refresh();}, 1);
+</script>
+    </body>
+</html>
