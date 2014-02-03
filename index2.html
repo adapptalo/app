@@ -7,14 +7,6 @@
 
 </head>
 <body>
-<div data-role="view" id="beers-view"  data-layout="tabstrip-appearance" data-title="Beers" data-model="viewModel" class="km-insetcontent">
-        <ul data-role="indexedlistview" data-bind="source: artists" data-template="artist-list-template" data-fixed-headers="true"></ul>
-</div>
-
-<script id="artist-list-template" type="text/x-kendo-template">
-        #=Name#
-</script>
-
 <div data-role="view" id="tabstrip-gallery" data-title="Gallery" data-layout="tabstrip-appearance">
     <ul data-role="listview" data-style="inset">
         <li><h2>Boston</h2><img src="http://demos.kendoui.com/content/mobile/overview/boston.jpg" /></li>
@@ -92,7 +84,6 @@
 
     <div data-role="footer">
         <div data-role="tabstrip" id="custom-tabstrip">
-            <a href="#beers-view" data-icon="share">BeerList</a>
             <a href="#tabstrip-gallery" data-icon="camera">Gallery</a>
             <a href="#tabstrip-cities" data-icon="globe">Cities</a>
             <a href="#tabstrip-favourites" data-icon="favorites">Favourites</a>

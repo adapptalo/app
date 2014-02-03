@@ -63,7 +63,7 @@ define(["jQuery", "kendo", "config", "utils"], function ($, kendo, config, utils
                         }
                 }
         }),
-        beersD: new kendo.data.DataSource({
+        beersD2: new kendo.data.DataSource({
                 data: artistsData,
                 group: [{field: "FirstLetter"}],
                 schema: {
