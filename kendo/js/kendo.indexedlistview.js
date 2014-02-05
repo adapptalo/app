@@ -1,94 +1,36 @@
-define(["jQuery", "kendo"], function ($, kendo) {
+(function ($, kendo) {
     "use strict";
 
     var base = kendo.mobile.ui.ListView;
-    var that;
-    var userEvents;
-    var _indexList = $('<ul class="km-listview-index"></ul>');
-    var _scrollWrapper;
-    var _prevIndex = undefined;
-    var _indexCard = $('<div class="km-listview-index-card"></div>');
-
-    var _indexSelected = function (x, y) {
-        try {
-            var targetElement = $(document.elementFromPoint(x, y));
-            var targetIndex = parseInt(targetElement.data("index"));
-            if(_prevIndex !== targetIndex) {
-                _prevIndex = targetIndex;
-                _scrollToIndex(targetIndex);
-                window.x = targetElement;
-                _showIndexCard(targetElement.offset().top - (targetElement.height() / 2), targetElement.text());
-            }
-        } catch (ex) {
-            _onIndexDragEnd();
-        }
-    };
-
-    var _scrollToIndex = function (targetIndex) {
-        var targetTop = that.headers[that.headers.length - targetIndex - 1].offset;
-        that._scroller().scrollTo(0, targetTop * -1);
-    };
-
-    var _showIndexCard = function (y, text) {
-        _indexCard.text(text);
-        _indexCard.css("top", (y - (_indexCard.height() / 2)) + "px");
-        _indexCard.css("left", (Math.floor((_scrollWrapper.width() * .7) - (_indexCard.width() / 2))) + "px");
-        _indexCard.show();
-    };
-
-    var _onIndexDragMove = function (e) {
-        _indexSelected(e.touch.x.location, e.touch.y.location);
-    };
-
-    var _onIndexDragStart = function () {
-        _prevIndex = undefined;
-        _indexList.addClass("km-ontouch");
-    };
-
-    var _onIndexDragEnd = function () {
-        _indexCard.hide();
-        _prevIndex = undefined;
-        _indexList.removeClass("km-ontouch");
-    };
-
-    var _createIndexList = function (items) {
-        $.each(items, function (index, item) {
-            var newElement = $('<li data-index="' + index + '">' + item.value + '</li>');
-            _indexList.append(newElement);
-        });
-    };
-
-    var _sizeIndexList = function (itemCount) {
-        var lineHeight = Math.floor((_scrollWrapper.height() - 20) / itemCount);
-        _indexList.css("line-height", lineHeight + "px");
-        _indexList.css("font-size", (lineHeight - 1) + "px");
-    };
-
     var IndexedListView = base.extend({
         init: function(element, options) {
-            that = this;
+            var self = this;
+			this._scrollWrapper = undefined;
+			this._prevIndex = undefined;
+			this._indexList = $('<ul class="km-listview-index"></ul>');
+			this._indexCard = $('<div class="km-listview-index-card"></div>');
 
-            base.fn.init.call(that, element, options);
+            base.fn.init.call(this, element, options);
             $(element).addClass("km-indexedlistview");
 
-            if (that._scroller()) {
+            if (this._scroller()) {
                 kendo.onResize(function() {
-                    _sizeIndexList(that.headers.length);
+                    this._sizeIndexList(self.headers.length);
                 });
             }
 
-            _scrollWrapper = $(element).closest(".km-scroll-wrapper");
-            _scrollWrapper.prepend(_indexList);
-            $("body").prepend(_indexCard);
+            this._scrollWrapper = $(element).closest(".km-scroll-wrapper");
+            this._scrollWrapper.prepend(this._indexList);
+            $("body").prepend(this._indexCard);
 
            
-            that.userEvents = new kendo.UserEvents(_indexList, {
+            this.userEvents = new kendo.UserEvents(this._indexList, {
                 stopPropagation: true,
-                press: function (e) { _onIndexDragStart(); _onIndexDragMove(e); },
-                tap: _onIndexDragEnd,
-                start: function () { that.userEvents.capture(); _onIndexDragStart(); },
-                move: _onIndexDragMove,
-                end: _onIndexDragEnd
+                press: function (e) { self._onIndexDragStart(); self._onIndexDragMove(e); },
+                tap: $.proxy(this._onIndexDragEnd, this),
+                start: function () { self.userEvents.capture(); self._onIndexDragStart(); },
+                move: $.proxy(this._onIndexDragMove, this),
+                end: $.proxy(this._onIndexDragEnd, this)
             });
         },
 
@@ -97,16 +39,71 @@ define(["jQuery", "kendo"], function ($, kendo) {
         }),
 
         refresh: function (e) {
-            base.fn.refresh.call(that, e);
+            base.fn.refresh.call(this, e);
 
-            if (that.dataSource.group()[0]) {
-                _indexList.empty();
-                _sizeIndexList(e.items.length);
-                _createIndexList(e.items);
+            if (this.dataSource.group()[0]) {
+                this._indexList.empty();
+                this._sizeIndexList(this.dataSource.view().length);
+                this._createIndexList(this.dataSource.view());
             }
-        }
+        },
+
+		_indexSelected: function (x, y) {
+			try {
+				var targetElement = $(document.elementFromPoint(x, y));
+				var targetIndex = parseInt(targetElement.data("index"));
+				if(this._prevIndex !== targetIndex) {
+					this._prevIndex = targetIndex;
+					this._scrollToIndex(targetIndex);
+					window.x = targetElement;
+					this._showIndexCard(targetElement.offset().top - (targetElement.height() / 2), targetElement.text());
+				}
+			} catch (ex) {
+				this._onIndexDragEnd();
+			}
+		},
+
+		_scrollToIndex: function (targetIndex) {
+			var targetTop = this.headers[this.headers.length - targetIndex - 1].offset;
+			this._scroller().scrollTo(0, targetTop * -1);
+		},
+
+		_showIndexCard: function (y, text) {
+			this._indexCard.text(text);
+			this._indexCard.css("top", (y - (this._indexCard.height() / 2)) + "px");
+			this._indexCard.css("left", (Math.floor((this._scrollWrapper.width() * .7) - (this._indexCard.width() / 2))) + "px");
+			this._indexCard.show();
+		},
+
+		_onIndexDragMove: function (e) {
+			this._indexSelected(e.touch.x.location, e.touch.y.location);
+		},
+
+		_onIndexDragStart: function () {
+			this._prevIndex = undefined;
+			this._indexList.addClass("km-ontouch");
+		},
+
+		_onIndexDragEnd: function () {
+			this._indexCard.hide();
+			this._prevIndex = undefined;
+			this._indexList.removeClass("km-ontouch");
+		},
+
+		_createIndexList: function (items) {
+			var self = this;
+			$.each(items, function (index, item) {
+				var newElement = $('<li data-index="' + index + '">' + item.value + '</li>');
+				self._indexList.append(newElement);
+			});
+		},
+
+		_sizeIndexList: function (itemCount) {
+			var lineHeight = Math.floor((this._scrollWrapper.height() - 20) / itemCount);
+			this._indexList.css("line-height", lineHeight + "px");
+			this._indexList.css("font-size", (lineHeight - 1) + "px");
+		}
     });
 
     kendo.mobile.ui.plugin(IndexedListView);
-    return {};
-});
+})(window.jQuery, window.kendo);
