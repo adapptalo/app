@@ -16,7 +16,7 @@
     <author href="https://adapptalo.com" email="adapptalo@gmail.com">
         Isidro Escoda
     </author>
-     <preference name="webviewbounce" value="false" />
-
+    <preference name="webviewbounce" value="false" />
+    <preference name="phonegap-version" value="3.0.0" />
     <preference name="orientation" value="portrait" />
 </widget>
