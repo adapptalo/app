@@ -13,7 +13,8 @@
 
         <style type="text/css">
             body.km-root > p { margin: 20px; }
-	#custom-tabstrip,#custom-tabstrip .km-button{  background: url(http://demos.kendoui.com/content/shared/images/patterns/pattern3.png);}		
+	#custom-tabstrip,#custom-tabstrip .km-button{  background: url(http://demos.kendoui.com/content/shared/images/patterns/pattern3.png);}	
+        .km-list img{width: 30px;}
         </style>
 	</head>
 
@@ -31,7 +32,7 @@
 			</div>
 
 			<script id="beer-list-template" type="text/x-kendo-template">
-				<img src="Imagen/beers/#=IMAGEN#">#=CERVESERA# <br> #=CERVESA#
+				<img src="Images/beers/#=IMAGEN#">#=CERVESERA# >> #=CERVESA#
 			</script>
                         
 			<div data-role="view" id="tabstrip-gallery" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
