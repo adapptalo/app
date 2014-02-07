@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.adapptalo.BBF2014"
+        versionCode="10" 
+        version   = "1.0.0">
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>Barcelona Beer Festival 2014</name>
+
+    <description>
+        Aplicación del festival de cervezas artesanas. 
+    </description>
+
+    <author href="https://adapptalo.com" email="adapptalo@gmail.com">
+        Isidro Escoda
+    </author>
+     <preference name="webviewbounce" value="false" />
+
+    <preference name="orientation" value="portrait" />
+</widget>
