@@ -14,7 +14,11 @@
         <style type="text/css">
         body.km-root > p { margin: 20px; }
 	#custom-tabstrip,#custom-tabstrip .km-button{  background: url(http://demos.kendoui.com/content/shared/images/patterns/pattern3.png);}	
-
+        .km-ios6 .km-navbar, .km-ios6 .km-toolbar
+        {
+            background-color: none !important;
+            background-image: transparent !important;
+        }
         .km-content .km-button {
             background: url(http://demos.kendoui.com/content/shared/images/patterns/pattern9.png);
             color: #ffffff;
@@ -50,7 +54,17 @@
             -webkit-box-shadow: 0 1px 3px #333;
             box-shadow: 0 1px 3px #333;
             -webkit-border-radius: 8px;
-            border-radius: 8px;
+            border-radius: 10px;
+                /*background-position: center center;
+                background-repeat: no-repeat;
+                background-size: auto 100%;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                border-radius: 4em;
+                display: inline-block;
+                height: 35px;
+                margin: 0;
+                vertical-align: middle;
+                width: 35px;*/
         }
 
         .item-title {
