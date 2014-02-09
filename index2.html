@@ -7,6 +7,17 @@
 
 </head>
 <body>
+    
+<div data-role="view" id="beers-view" data-url="/" data-layout="tabstrip-appearance" data-title="BeerList" data-model="viewModel" class="km-insetcontent">
+    <ul id="custom-listview" data-role="indexedlistview" data-bind="source: beers" data-template="beer-list-template" data-fixed-headers="true"></ul>
+</div>
+<script id="beer-list-template" type="text/x-kendo-template">
+    <a data-role="listview-link" href="\#details?alert_ID=#:B_Id#">
+        XXX
+    </a>
+
+</script> 
+
 <div data-role="view" id="tabstrip-gallery" data-title="Gallery" data-layout="tabstrip-appearance">
     <ul data-role="listview" data-style="inset">
         <li><h2>Boston</h2><img src="http://demos.kendoui.com/content/mobile/overview/boston.jpg" /></li>
@@ -84,6 +95,7 @@
 
     <div data-role="footer">
         <div data-role="tabstrip" id="custom-tabstrip">
+            <a href="#beers-view" data-icon="share">Gallery</a>
             <a href="#tabstrip-gallery" data-icon="camera">Gallery</a>
             <a href="#tabstrip-cities" data-icon="globe">Cities</a>
             <a href="#tabstrip-favourites" data-icon="favorites">Favourites</a>
@@ -203,7 +215,7 @@
         });
 
         var viewModel = kendo.observable({
-                artists: artistsDataSource
+                beers: artistsDataSource
         });
         //setTimeout(function () {$(".km-indexedlistview").data("kendoMobileIndexedListView").refresh();}, 1);
 </script>

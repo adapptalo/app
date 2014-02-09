@@ -142,6 +142,12 @@
             background: transparent;
             color: #fff;
         }
+        #beer_detail-list .km-group-title{display:none}
+        #side-inbox {background-image: url(Images/background.png);background-size: cover;
+    background-repeat: no-repeat}
+        .km-ios .km-list > li,.km-content,.km-ios, .km-ios .km-content{background: transparent;}
+        #side-inbox .item-photo{width: 80px; height: 80px;}
+        #side-inbox .km-listview .km-list{width: 300px;background-image: none}
         </style>
         
 	</head>
@@ -160,16 +166,36 @@
 			</div>
 
 			<script id="beer-list-template" type="text/x-kendo-template">
-				<a
-            
-            data-role="listview-link"
-            href="\#details?id=#:B_Id#">
+				<a style="height:60px;" data-role="listview-link" href="\#side-inbox?alert_ID=#:B_Id#">
                                     <img src="Images/beers/#=IMAGEN#" class="item-photo">
                                     <h3 class="item-title">#=CERVESERA#</h3>
                                     <p class="item-info">#=CERVESA#</p>
                                 </a>
+                                
                         </script>
                         
+                        <div data-role="view" id="side-inbox" data-show="showDetailsView">
+                            <header data-role="header">
+                              <div data-role="navbar">
+                                <a data-role="backbutton" data-align="left">Back</a>
+                                <span data-role="view-title">Beer Details</span>
+                              </div>
+                            </header>
+                            <ul id="beer_detail-list" data-role="listview" data-auto-bind="false" data-source="ds" data-template="productsTemplate">
+
+                            </ul>
+                        </div>
+
+                        <!--DETAIL VIEW LAYOUT-->     
+                        <script id="productsTemplate" type="text/x-kendo-template">
+                            <aside><img src="Images/beers/#=IMAGEN#" class="item-photo"></aside>
+                            <h2 class="item-title">#=CERVESERA#</h2>
+                            <p class="item-title">#=CERVESA# - #=PROCEDENCIA#</p>
+                            <p>#=DESCRIPCIO#</p>
+                        </script>
+
+                       
+
 			<div data-role="view" id="tabstrip-gallery" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
 				<h1>GALLERY</h1>
 			</div>
@@ -226,6 +252,21 @@
 				}
 			});
                         
+                        var beersDataSource2 = new kendo.data.DataSource({
+				data: beersData,
+				group: [{field: "FirstLetter"}],
+				schema: {
+					parse: function (data) {
+						$.each(data, function (index, artist) {
+							artist.FirstLetter = artist.CERVESERA.substring(0,1).toUpperCase();
+							if(artist.FirstLetter.match(/\d/)) {
+								artist.FirstLetter = "#"
+							}
+						});
+						return data;
+					}
+				}
+			});
 			var viewModel = kendo.observable({
 				artists: artistsDataSource,
                                 beers: beersDataSource
@@ -235,6 +276,19 @@
 			// this just fixes a glitch in this demo page.
 			// not needed in real Kendo Mobile use.
 			setTimeout(function () {$(".km-indexedlistview").data("kendoMobileIndexedListView").refresh();}, 1);
+                        
+                        
+                        var ds = beersDataSource2;
+           
+                        function showDetailsView(e) {
+                            ds.filter({
+                                field: "B_Id",
+                                operator: "eq",
+                                value: parseInt(e.view.params.alert_ID)
+                            });
+
+                            ds.read();
+                        }
 		</script>
 		<script>
 			var app = new kendo.mobile.Application(document.body);
