@@ -103,7 +103,7 @@
         }
 
         .km-listview .km-group-title {
-            padding: 0;
+            /*padding: 0;*/
             border-top: 0;
             box-shadow: none;
         }
@@ -160,10 +160,15 @@
 			</div>
 
 			<script id="beer-list-template" type="text/x-kendo-template">
-				<img src="Images/beers/#=IMAGEN#" class="item-photo">
-    <h3 class="item-title">#=CERVESERA#</h3>
-    <p class="item-info">#=CERVESA#</p>
-			</script>
+				<a
+            
+            data-role="listview-link"
+            href="\#details?id=#:B_Id#">
+                                    <img src="Images/beers/#=IMAGEN#" class="item-photo">
+                                    <h3 class="item-title">#=CERVESERA#</h3>
+                                    <p class="item-info">#=CERVESA#</p>
+                                </a>
+                        </script>
                         
 			<div data-role="view" id="tabstrip-gallery" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
 				<h1>GALLERY</h1>
