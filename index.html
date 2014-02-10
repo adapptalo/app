@@ -25,7 +25,10 @@
                         navigator.geolocation.getCurrentPosition(lecturaExitosa, error , {enableHighAccuracy: true } );
                     }
                     function lecturaExitosa(posicion) {
-                        alert(' tu posicion es: Latitud ' + posicion.coords.latitude+'\n' + 'Longitud '+ posicion.coords.longitude )
+                        alert(' tu posicion es: Latitud ' + posicion.coords.latitude+'\n' + 'Longitud '+ posicion.coords.longitude );
+                        var latlng2 = new google.maps.LatLng(41.375553,2.149284);
+                        map.setCenter(latlng2);
+                        marker.setPosition(latlng2);
                     }
                     function error(){
                         alert('no se donde estas');
@@ -381,6 +384,8 @@
 		<script>
 			var app = new kendo.mobile.Application(document.body);
 			//initialize the google map
+                        var map;
+                        var marker;
                         function buildMap(e) {
                             var myOptions = {
                                 center: new google.maps.LatLng(41.375553,2.149284),
@@ -391,7 +396,7 @@
                             var mapElement = $("#map_canvas");
                             var container = e.view.content;
 
-                            var map = new google.maps.Map(mapElement[0], myOptions);
+                            map = new google.maps.Map(mapElement[0], myOptions);
                             var latlng = new google.maps.LatLng(41.375553,2.149284);
 
                             marker = new google.maps.Marker({
