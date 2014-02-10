@@ -102,7 +102,7 @@
             font-size: .8em;
             line-height: 1em;
             margin: 0 0 0 .95em;
-            width: 45%;
+            width: 47%;
         }
 
         .item-title,
@@ -209,6 +209,9 @@
                 display: -webkit-box;
                 width: 100%;
             }
+            #side-inbox aside{/*border: 2px solid #EFEFEF; border-radius: 10px;background-color: whitesmoke*/}
+            #side-inbox .km-content{background: url(Images/background.png) no-repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
         </style>
         
 	</head>
@@ -224,6 +227,8 @@
                                     <img src="Images/beers/#=IMAGEN#" class="item-photo">
                                     <h3 class="item-title">#=CERVESERA#</h3>
                                     <p class="item-info">#=CERVESA#</p>
+                                    <p class="item-info"><span class="">ABV:</span>#=ABV#%
+                                    <span class=""> IBU:</span>#=IBU#</p>
                                 </a>
                                 
                         </script>
@@ -245,10 +250,10 @@
                             <aside><img src="Images/beers/#=IMAGEN#" class="item-photo">
                             <h2 class="price">#=CERVESERA#</h2>
                             <p class="price2">#=CERVESA#
-                                    <br><span class="icon_detail km-icon km-globe pull-right"></span>#=PROCEDENCIA#
-                                    <br><span class="icon_detail km-icon km-details pull-right"></span>#=ESTIL#
-                                    <br><span class="icon_detail km-icon km-details pull-right"></span>#=ABV#
-                                    <br><span class="icon_detail km-icon km-details pull-right"></span>#=IBU#
+                                    <br><span class="km-icon km-globe"></span>#=PROCEDENCIA#
+                                    <br><span class="">Estilo:</span>#=ESTIL#
+                                    <br><span class="">ABV:</span>#=ABV#%
+                                    <span class=""> IBU:</span>#=IBU#
                             </p>
                             <p class="item-info">#=DESCRIPCIO#</p><a data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">#=ESTIL#</a></aside>
                             
