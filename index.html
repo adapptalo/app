@@ -28,7 +28,7 @@
                         alert(' tu posicion es: Latitud ' + posicion.coords.latitude+'\n' + 'Longitud '+ posicion.coords.longitude );
                         var latlng2 = new google.maps.LatLng(posicion.coords.latitude,posicion.coords.longitude);
                         map.setCenter(latlng2);
-                        marker.setPosition(latlng2);
+                        marcador.setPosition(latlng2);
                     }
                     function error(){
                         alert('no se donde estas');
@@ -399,6 +399,9 @@
                             map = new google.maps.Map(mapElement[0], myOptions);
                             var latlng = new google.maps.LatLng(41.375553,2.149284);
 
+                            marcador = new google.maps.Marker( {
+                                  map:map	
+                            })
                             marker = new google.maps.Marker({
                                 map:        map,
                                 draggable:  false,
