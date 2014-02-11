@@ -219,66 +219,78 @@ background-repeat: no-repeat;
 color : white;
  
 }
+.bold{font-weight: bold}
+.item-info2{
+            font-size: 11px;
+            line-height: 2em;
+            
+             color: #974d2e;
+           }
         </style>
         
 	</head>
 
 	<body>
 
-                        <div data-role="view" id="beers-view" data-url="/" data-layout="tabstrip-appearance" data-title="BeerList" data-model="viewModel" class="km-insetcontent">
-				<ul id="custom-listview" data-role="indexedlistview" data-bind="source: beers" data-template="beer-list-template" data-fixed-headers="true"></ul>
-			</div>
+                <div data-role="view" id="beers-view" data-url="/" data-layout="tabstrip-appearance" data-title="BeerList" data-model="viewModel" class="km-insetcontent">
+                        <ul id="custom-listview" data-role="indexedlistview" data-bind="source: beers" data-template="beer-list-template" data-fixed-headers="true"></ul>
+                </div>
 
-			<script id="beer-list-template" type="text/x-kendo-template">
-				<a style="height:60px;" data-role="listview-link" href="\#side-inbox?alert_ID=#:B_Id#">
-                                    <img src="Images/beers/#=IMAGEN#" class="item-photo">
-                                    <h3 class="item-title">#=CERVESERA#</h3>
-                                    <p class="item-info">#=CERVESA#</p>
-                                    <p class="item-info"><span class="">ABV:</span>#=ABV#%
-                                    <span class=""> IBU:</span>#=IBU#</p>
-                                </a>
-                                
-                        </script>
+                <script id="beer-list-template" type="text/x-kendo-template">
+                        <a style="height:60px;" data-role="listview-link" href="\#side-inbox?alert_ID=#:B_Id#">
+                            <img src="Images/beers/#=IMAGEN#" class="item-photo">
+                            <h3 class="item-title">#=CERVESERA#</h3>
+                            <p class="item-info">#=CERVESA#</p>
+                            <p class="item-info"><span class="">ABV:</span>#=ABV#%
+                            <span class=""> IBU:</span>#=IBU#</p>
+                        </a>
+
+                </script>
+
+                <div data-role="view" id="side-inbox" data-show="showDetailsView">
+                    <header data-role="header">
+                      <div data-role="navbar">
+                        <a data-role="backbutton" data-align="left">Back</a>
+                        <span data-role="view-title">Beer Details</span>
+                      </div>
+                    </header>
+                    <ul id="beer_detail-list" data-role="listview" data-auto-bind="false" data-source="ds" data-template="productsTemplate">
+
+                    </ul>
+                </div>
+
+                <!--DETAIL VIEW LAYOUT-->     
+                <script id="productsTemplate" type="text/x-kendo-template">
+                    <aside>
+                        <img src="Images/beers/#=IMAGEN#" class="item-photo">
+                        <h2 class="price">#=CERVESERA#</h2>
+                        <p class="price2">#=CERVESA#
+                                <br><span class="km-icon km-globe"></span>#=PROCEDENCIA#
+                                <br><span class="bold">Estilo:</span>#=ESTIL#
+                                <br><span class="bold">ABV:</span>#=ABV#%
+                                <span class="bold"> IBU:</span>#=IBU#
+                        </p>
+                        <p class="item-info2">#=DESCRIPCIO#</p>
                         
-                        <div data-role="view" id="side-inbox" data-show="showDetailsView">
-                            <header data-role="header">
-                              <div data-role="navbar">
-                                <a data-role="backbutton" data-align="left">Back</a>
-                                <span data-role="view-title">Beer Details</span>
-                              </div>
-                            </header>
-                            <ul id="beer_detail-list" data-role="listview" data-auto-bind="false" data-source="ds" data-template="productsTemplate">
+                        <a style="width:40%; float:left" data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">BEERWISH</a>
+                        <a style="width:40%; float:right" data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">SHARE</a>
+                    </aside>
 
-                            </ul>
-                        </div>
+                </script>
 
-                        <!--DETAIL VIEW LAYOUT-->     
-                        <script id="productsTemplate" type="text/x-kendo-template">
-                            <aside><img src="Images/beers/#=IMAGEN#" class="item-photo">
-                            <h2 class="price">#=CERVESERA#</h2>
-                            <p class="price2">#=CERVESA#
-                                    <br><span class="km-icon km-globe"></span>#=PROCEDENCIA#
-                                    <br><span class="">Estilo:</span>#=ESTIL#
-                                    <br><span class="">ABV:</span>#=ABV#%
-                                    <span class=""> IBU:</span>#=IBU#
-                            </p>
-                            <p class="item-info">#=DESCRIPCIO#</p><a data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">#=ESTIL#</a></aside>
-                            
-                        </script>
+                <div data-role="view" id="tabstrip-gallery" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
+                        <h1>GALLERY</h1>
+                </div>
+                <div data-role="view" id="sponsor" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
+                        <h1>SPONSORS</h1>
+                </div>
 
-			<div data-role="view" id="tabstrip-gallery" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
-				<h1>GALLERY</h1>
-			</div>
-			<div data-role="view" id="sponsor" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
-				<h1>SPONSORS</h1>
-			</div>
-                        
-                        <!-- hook up to the init event of the view and initialize the google map -->
-                        <div data-role="view" data-layout="tabstrip-appearance"  data-init="buildMap" id="map" data-title="Map">
-                            <div id="map_canvas" style="width:100%;height: 100%; position: absolute;"></div>
-                             <button  style="width:100%;height: 20%; right:0;bottom:0;position: absolute; background-color: transparent; border: none;background-image: url('Images/find.png'); background-repeat: no-repeat; background-position: center" onclick="mostrarPosicion();" class='btn'></button>
+                <!-- hook up to the init event of the view and initialize the google map -->
+                <div data-role="view" data-layout="tabstrip-appearance"  data-init="buildMap" id="map" data-title="Map">
+                    <div id="map_canvas" style="width:100%;height: 100%; position: absolute;"></div>
+                     <button  style="width:100%;height: 20%; right:0;bottom:0;position: absolute; background-color: transparent; border: none;background-image: url('Images/find.png'); background-repeat: no-repeat; background-position: center" onclick="mostrarPosicion();" class='btn'></button>
 
-                        </div>
+                </div>
 
 		<div data-role="layout" data-id="tabstrip-appearance">
 			<header data-role="header" id="tabstrip-appearance-header">
