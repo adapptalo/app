@@ -19,4 +19,5 @@
     <preference name="webviewbounce" value="false" />
     <preference name="phonegap-version" value="3.0.0" />
     <preference name="orientation" value="portrait" />
+    <gap:plugin name="nl.x-services.plugins.socialsharing" />
 </widget>

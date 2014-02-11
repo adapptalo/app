@@ -170,11 +170,11 @@
     background-repeat: no-repeat}
         .km-ios .km-list > li,.km-content,.km-ios, .km-ios .km-content{background: transparent;}
         #side-inbox .item-photo{  background-color: #FFFFFF;
-    height: 80px;
+    height: 75px;
     margin-left: 10px;
     margin-right: 10px;
     padding: 10px;
-    width: 80px;margin-bottom: 20px;}
+    width: 75px;/*margin-bottom: 20px;*/}
         #side-inbox .km-listview .km-list{/*width: 300px;*/background-image: none; margin-top:69px;}
         #side-inbox .km-content aside .price {
             display: block;
@@ -256,7 +256,11 @@ color : white;
                       </div>
                     </header>
                     <ul id="beer_detail-list" data-role="listview" data-auto-bind="false" data-source="ds" data-template="productsTemplate"></ul>
-                    
+                    <button onclick="window.plugins.socialsharing.shareViaTwitter('Message via Twitter')">message via Twitter</button>
+                    <button onclick="window.plugins.socialsharing.shareViaTwitter('Message and link via Twitter', null, 'http://www.x-services.nl')">msg and link via Twitter</button>
+                    <button onclick="window.plugins.socialsharing.shareViaFacebook('Message via Facebook', null, null, console.log('share ok'), function(errormsg){alert(errormsg)})">msg via Facebook (with errcallback)</button>
+                    <button onclick="window.plugins.socialsharing.shareViaWhatsApp('Message via WhatsApp', null, null, console.log('share ok'), function(errormsg){alert(errormsg)})">msg via WhatsApp (with errcallback)</button>
+                    <button onclick="window.plugins.socialsharing.shareViaSMS('My cool message', function(msg) {console.log('ok: ' + msg)}, function(msg) {alert('nok: ' + msg)})">share via SMS</button>
                 </div>
 
                 <!--DETAIL VIEW LAYOUT-->     
@@ -271,13 +275,13 @@ color : white;
                                 <span class="bold"> IBU:</span>#=IBU#
                         </p>
                         <p class="item-info2">#=DESCRIPCIO#</p>
-                        <input type="text" data-bind="value: #=CERVESERA#" id="fName" />
-                        <input type="text" data-bind="value: #=CERVESA#" id="lName" />
-                        <a data-bind="click: addName" data-role="button" id="btnOne">Add</a>
+                       
                         <a style="width:40%; float:left" data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">BEERWISH</a>
                         <a style="width:40%; float:right" data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">SHARE</a>
                     </aside>
-
+                        <input type="text" data-bind="value: #=CERVESERA#" id="fName" />
+                        <input type="text" data-bind="value: #=CERVESA#" id="lName" />
+                        <a data-bind="click: addToCart" data-role="button" id="btnOne">Add</a>
                 </script>
 
                 <div data-role="view" id="beerwish" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
@@ -405,16 +409,7 @@ color : white;
                                 firstName: null,
                                 lastName: null,
                                 peopleList: [], 
-                                addName:  function (e) {
-                                var me = this;
-                                alert();
-                                me.get("peopleList").push({
-                                  first: me.get("firstName"),
-                                  last: me.get("lastName")
-                                });
-                                me.set("firstName", '');
-                                me.set("lastName", '');
-                                  }
+                                addToCart: addToCart
 			});
 			//new kendo.mobile.Application(document.body);
 			
@@ -434,7 +429,11 @@ color : white;
 
                             ds.read();
                         }
-                      
+                      function addToCart(e) {
+                        alert("addToCart");
+                        
+                    }
+
                         document.addEventListener("backbutton", onBackKeyDown, false);
 
                             function onBackKeyDown() {
@@ -464,7 +463,8 @@ color : white;
 		</script>
 		<script>
 			var app = new kendo.mobile.Application(document.body);
-			//initialize the google map
+			
+                        //initialize the google map
                         var map;
                         var marker;
                         function buildMap(e) {
@@ -481,7 +481,9 @@ color : white;
                             var latlng = new google.maps.LatLng(41.375553,2.149284);
 
                             marcador = new google.maps.Marker( {
-                                  map:map	
+                                  map:map,
+                                  draggable:  false,
+                                animation:  google.maps.Animation.DROP
                             })
                             marker = new google.maps.Marker({
                                 map:        map,
@@ -499,7 +501,7 @@ color : white;
                             } else {
                               marker.setAnimation(google.maps.Animation.BOUNCE);
                             }
-                          }
+                        }
 		</script>
                 
 	</body>
