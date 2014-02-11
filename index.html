@@ -6,7 +6,7 @@
 		<meta name="format-detection" content="telephone=yes" />
 		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 		
-		<title>index</title>
+		<title>BBF2014</title>
 
                 <link href="http://cdn.kendostatic.com/2013.1.319/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 		<link href="kendo/styles/kendo.indexedlistview.css" rel="stylesheet" />
@@ -226,6 +226,7 @@ color : white;
             
              color: #974d2e;
            }
+           .km-ios .km-icon{color:#4F576F}
         </style>
         
 	</head>
@@ -278,17 +279,18 @@ color : white;
 
                 </script>
 
-                <div data-role="view" id="tabstrip-gallery" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
+                <div data-role="view" id="beerwish" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
                         <h1>GALLERY</h1>
+                        <ul data-role="listview" data-template="people-l-template" data-bind="source: peopleList" id="pList"></ul>
                 </div>
-                <div data-role="view" id="sponsor" data-layout="tabstrip-appearance" data-title="BeerWish" data-model="viewModel" class="km-insetcontent">
+                <div data-role="view" id="sponsor" data-layout="tabstrip-appearance" data-title="Sponsors" data-model="viewModel" class="km-insetcontent">
                         <h1>SPONSORS</h1>
                 </div>
 
                 <!-- hook up to the init event of the view and initialize the google map -->
-                <div data-role="view" data-layout="tabstrip-appearance"  data-init="buildMap" id="map" data-title="Map">
+                <div data-role="view" data-layout="tabstrip-appearance"  data-init="buildMap" id="map" data-title="Contacto">
                     <div id="map_canvas" style="width:100%;height: 100%; position: absolute;"></div>
-                     <button  style="width:100%;height: 20%; right:0;bottom:0;position: absolute; background-color: transparent; border: none;background-image: url('Images/find.png'); background-repeat: no-repeat; background-position: center" onclick="mostrarPosicion();" class='btn'></button>
+                     <button  style="width:10%;height: 20%; right:50%;bottom:0;position: absolute;left:50%; background-color: transparent; border: none;background-image: url('Images/find.png'); background-repeat: no-repeat; background-position: center" onclick="mostrarPosicion();" class='km-button'></button>
 
                 </div>
 
@@ -302,8 +304,9 @@ color : white;
 			<div data-role="footer">
 				<div data-role="tabstrip" id="custom-tabstrip">
 					<a href="/" data-icon="share">BeerList</a>
-					<a href="#tabstrip-gallery" data-icon="camera">Gallery</a>
-                                        <a href="#map" data-icon="info">About</a>
+					<a href="#beerwish" data-icon="camera">BeerWish</a>
+                                        <a href="#sponsor" data-icon="camera">Sponsors</a>
+                                        <a href="#map" data-icon="info">Contacto</a>
 				</div>
 			</div>
 		</div>
@@ -360,6 +363,34 @@ color : white;
 					}
 				}
 			});
+                        //alert('typeof movieArray: ' + typeof beersData);
+
+                        /*console.log('movieArray:');
+
+                        for (var p in beersData) {
+
+                            console.log(p+':'+beersData[p].CERVESERA+'|'+beersData[p].CERVESA);
+
+                        }*/
+
+
+
+                        localStorage.setItem('movieArray', JSON.stringify(beersData));
+
+                        var retrievedMovieArray = JSON.parse(localStorage.getItem('movieArray'));
+
+
+
+                      //alert('typeof retrievedMovieArray: ' + typeof retrievedMovieArray);
+
+                      /*console.log('retrievedMovieArray:');
+
+                      for (var p in retrievedMovieArray) {
+
+                          console.log(p +'->'+ retrievedMovieArray[p].CERVESA +'|'+retrievedMovieArray[p].CERVESERA);
+
+                      }*/
+                      
 			var viewModel = kendo.observable({
 				artists: artistsDataSource,
                                 beers: beersDataSource
