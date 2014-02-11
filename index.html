@@ -255,9 +255,8 @@ color : white;
                         <span data-role="view-title">Beer Details</span>
                       </div>
                     </header>
-                    <ul id="beer_detail-list" data-role="listview" data-auto-bind="false" data-source="ds" data-template="productsTemplate">
-
-                    </ul>
+                    <ul id="beer_detail-list" data-role="listview" data-auto-bind="false" data-source="ds" data-template="productsTemplate"></ul>
+                    
                 </div>
 
                 <!--DETAIL VIEW LAYOUT-->     
@@ -272,7 +271,9 @@ color : white;
                                 <span class="bold"> IBU:</span>#=IBU#
                         </p>
                         <p class="item-info2">#=DESCRIPCIO#</p>
-                        
+                        <input type="text" data-bind="value: #=CERVESERA#" id="fName" />
+                        <input type="text" data-bind="value: #=CERVESA#" id="lName" />
+                        <a data-bind="click: addName" data-role="button" id="btnOne">Add</a>
                         <a style="width:40%; float:left" data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">BEERWISH</a>
                         <a style="width:40%; float:right" data-role="button" data-bind="click: addToCart"  data-item-id="#:B_Id#">SHARE</a>
                     </aside>
@@ -283,6 +284,13 @@ color : white;
                         <h1>GALLERY</h1>
                         <ul data-role="listview" data-template="people-l-template" data-bind="source: peopleList" id="pList"></ul>
                 </div>
+                 <!-- Kendo Template-->
+                <script id="people-l-template" type="text/x-kendo-template">
+                    FirstName: <span>#:first#</span>
+                    LastName: <span>#:last#</span>
+                    <a data-bind="click: removeName" data-role="button" id="btnRemoveName" data-first="#:first#" data-last="#:last#">X</a>
+                </script>
+
                 <div data-role="view" id="sponsor" data-layout="tabstrip-appearance" data-title="Sponsors" data-model="viewModel" class="km-insetcontent">
                         <h1>SPONSORS</h1>
                 </div>
@@ -303,8 +311,8 @@ color : white;
 			</header>
 			<div data-role="footer">
 				<div data-role="tabstrip" id="custom-tabstrip">
-					<a href="/" data-icon="share">BeerList</a>
-					<a href="#beerwish" data-icon="camera">BeerWish</a>
+					<a href="/" data-icon="globe">BeerList</a>
+					<a href="#beerwish" data-icon="share">BeerWish</a>
                                         <a href="#sponsor" data-icon="camera">Sponsors</a>
                                         <a href="#map" data-icon="info">Contacto</a>
 				</div>
@@ -393,7 +401,20 @@ color : white;
                       
 			var viewModel = kendo.observable({
 				artists: artistsDataSource,
-                                beers: beersDataSource
+                                beers: beersDataSource,
+                                firstName: null,
+                                lastName: null,
+                                peopleList: [], 
+                                addName:  function (e) {
+                                var me = this;
+                                alert();
+                                me.get("peopleList").push({
+                                  first: me.get("firstName"),
+                                  last: me.get("lastName")
+                                });
+                                me.set("firstName", '');
+                                me.set("lastName", '');
+                                  }
 			});
 			//new kendo.mobile.Application(document.body);
 			
