@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.phonegap.helloworld" version="1.4" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>X-Plugins Demo</name>
+    <name>BBF 2014</name>
     <description>
-        The PhoneGap Hello World sample, extended with our plugins, so you have nice copy-pasteable code for your own app.
+        Aplicación del festival de cervezas artesanas en Barcelona.
     </description>
     <author email="info@x-services.nl" href="http://www.x-services.nl">
-        X-Services, Netherlands
+        adapptalo
     </author>
     <feature name="http://api.phonegap.com/1.0/device" />
     <feature name="http://api.phonegap.com/1.0/media" />
