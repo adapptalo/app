@@ -12,7 +12,8 @@
 		<link href="kendo/styles/kendo.indexedlistview.css" rel="stylesheet" />
 
      <style type="text/css">
-        body.km-root > p { margin: 20px; }
+          
+       body.km-root > p { margin: 20px; }
 	#custom-tabstrip,#custom-tabstrip .km-button{  background: url(img/pattern3.png);}	
         .km-ios6 .km-navbar, .km-ios6 .km-toolbar
         {
@@ -30,7 +31,7 @@
         .km-wp-light  .km-navbar,
         .km-wp-dark  .km-navbar,
         .km-content .km-button {
-            background: url(img/pattern9.png);
+            background: url(img/pattern9.png) !important;
             color: #ffffff;
         }
         .item-photo {
@@ -97,14 +98,14 @@
             color: #974d2e;
             font-weight: normal;
             font-size: 1.4em;
-            background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.45) 6%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(100, 100, 100, 0)), url(http://demos.kendoui.com/content/shared/images/patterns/pattern4.png);
-            background-image: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.06, rgba(255, 255, 255, 0.45)), color-stop(0.5, rgba(255, 255, 255, 0.2)), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(1, rgba(100, 100, 100, 0))), url(http://demos.kendoui.com/content/shared/images/patterns/pattern4.png);
+            background-image: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.45) 6%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(100, 100, 100, 0)), url(img/pattern4.png);
+            background-image: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(0, rgba(255, 255, 255, 0.5)), color-stop(0.06, rgba(255, 255, 255, 0.45)), color-stop(0.5, rgba(255, 255, 255, 0.2)), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(1, rgba(100, 100, 100, 0))), url(img/pattern4.png);
         }
         .km-listview .km-list {
             border-top-color: #dcbe87;
             background-image: url(img/pattern8.png);
         }
-        .km-tablet .km-ios #listview-templates .km-view-title
+        .km-tablet .km-ios #beers-view .km-view-title
         {
             color: #fff;
             text-shadow: 0 -1px rgba(0,0,0,.5);
@@ -115,8 +116,8 @@
         .km-wp .km-group-title .km-text h2 {
             padding: 0 0 .1em .7em;
         }
-        .km-ios7 #listview-templates .km-navbar .km-button,
-        .km-ios7 #listview-templates .km-navbar .km-view-title
+        .km-ios7 #beers-view .km-navbar .km-button,
+        .km-ios7 #beers-view .km-navbar .km-view-title
         {
             background: transparent;
             color: #fff;
@@ -182,6 +183,7 @@
             color: #974d2e;
         }
        .km-ios .km-icon{color:#4F576F}
+
 </style>
         
 	</head>
@@ -324,7 +326,7 @@
       }
 
       window.onerror = function(a,b,c) {
-        alert(a + "; " + b + "; " + c);
+        //alert(a + "; " + b + "; " + c);
       }
     </script>
     
