@@ -277,12 +277,12 @@
         <!-- add the google maps scripts -->
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
         <script type="text/javascript">
-            document.addEventListener("deviceready", onDeviceReady, false);
+           /* document.addEventListener("deviceready", onDeviceReady, false);
             // Cordova esta disponible!
             //
             function onDeviceReady() {
             alert("listo")
-            }
+            }*/
 
             function mostrarPosicion(){
                 navigator.geolocation.getCurrentPosition(lecturaExitosa, error , {enableHighAccuracy: true } );
