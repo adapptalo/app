@@ -366,26 +366,18 @@
 				}
 			});
                         //alert('typeof movieArray: ' + typeof beersData);
-
                         /*console.log('movieArray:');
-
                         for (var p in beersData) {
-
                             console.log(p+':'+beersData[p].CERVESERA+'|'+beersData[p].CERVESA);
-
                         }*/
 
                         localStorage.setItem('movieArray', JSON.stringify(beersData));
                         var retrievedMovieArray = JSON.parse(localStorage.getItem('movieArray'));
 
                         //alert('typeof retrievedMovieArray: ' + typeof retrievedMovieArray);
-
                         /*console.log('retrievedMovieArray:');
-
                         for (var p in retrievedMovieArray) {
-
                             console.log(p +'->'+ retrievedMovieArray[p].CERVESA +'|'+retrievedMovieArray[p].CERVESERA);
-
                         }*/
                       
 			var viewModel = kendo.observable({
@@ -422,30 +414,22 @@
                         function onBackKeyDown() {
 
                             if (detailPageActive == 0) {
-
                                 navigator.notification.confirm('Exit App?', onConfirmExit, '', 'No, Yes');
-
-                            }
-
-                            else {
-
+                            }else {
                                 detailPageActive = 0;
-
                                 history.back();
-
                             }
-
                         }
                         function onConfirmExit(button) {
-
-                           navigator.app.exitApp();   
-
+                            navigator.app.exitApp();   
                         }
 
 
 		</script>
 		<script>
-			var app = new kendo.mobile.Application(document.body);
+			var app = new kendo.mobile.Application($(document.body), {
+    loading: "<h1>Por favor espera...</h1>"
+});
 			
                         //initialize the google map
                         var map;
