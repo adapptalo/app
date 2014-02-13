@@ -19,7 +19,7 @@ function socialsharingDemo(beer) {
       var message='Me estoy tomando una '+ combo;
       alert (JSON.stringify(message));
       // 2) an image from the internet:
-      window.plugins.socialsharing.share(message, 'Some subject', 'http://barcelonabeerfestival.com', 'http://adapptalo.com/BBF/image.jpg');
+      window.plugins.socialsharing.share(message, 'Some subject', 'http://barcelonabeerfestival.com', 'http://adapptalo.com/BBF/beerimages/guineu.png');
 
       // 3) text and link:
 //      window.plugins.socialsharing.share('Some text and a link', '', '', 'http://www.nu.nl');
