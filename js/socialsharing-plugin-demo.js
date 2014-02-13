@@ -1,5 +1,3 @@
-"use strict";
-
 function socialsharingDemo(beer) {
   window.plugins.socialsharing.available(function(isAvailable) {
     if (isAvailable) {
