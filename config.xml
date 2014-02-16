@@ -4,7 +4,6 @@
             xmlns:gap = "http://phonegap.com/ns/1.0"
             id        = "com.phonegap.helloworld"
             version   = "1.0.0">
-    </widget>
     <name>BBF 2014</name>
     <description>
         Aplicación del festival de cervezas artesanas en Barcelona.
@@ -47,9 +46,9 @@
     <preference name="detect-data-types" value="true" />
     <preference name="exit-on-suspend" value="false" />
     <preference name="show-splash-screen-spinner" value="true" />
-    <preference name="auto-hide-splash-screen" value="true" />
+    <preference name="auto-hide-splash-screen" value="t" />
     <preference name="disable-cursor" value="false" />
-    <preference name="android-minSdkVersion" value="7" />
+    <preference name="android-minSdkVersion" value="8" />
     <preference name="android-installLocation" value="auto" />
     <preference name="SplashScreenDelay" value="2000" />
 
