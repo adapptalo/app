@@ -22,6 +22,31 @@
     -->
     <feature name="http://api.phonegap.com/1.0/device" />
 
+    <gap:platform name="ios"/>
+    <gap:platform name="android"/>
+    <gap:platform name="wp8"/>
+
+
+    <!-- X-Services PhoneGap Build plugins -->
+    <gap:plugin name="nl.x-services.plugins.socialsharing" />
+    <gap:plugin name="nl.x-services.plugins.calendar" />
+    <gap:plugin name="nl.x-services.plugins.ioswebviewcolor" />
+    <gap:plugin name="nl.x-services.plugins.videocaptureplus" />
+    <gap:plugin name="nl.x-services.plugins.flashlight" />
+    <gap:plugin name="nl.x-services.plugins.toast" />
+    <gap:plugin name="nl.x-services.plugins.insomnia" />
+    <gap:plugin name="nl.x-services.plugins.sslcertificatechecker" />
+    <gap:plugin name="nl.x-services.plugins.launchmyapp">
+      <param name="URL_SCHEME" value="xpluginsdemo" />
+    </gap:plugin>
+
+
+    <!-- PhoneGap plugins -->
+    <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.media" />
+    <!--<gap:plugin name="org.apache.cordova.inappbrowser" />-->
+    
+    
     <!--
         If you do not want any permissions to be added to your app, add the
         following tag to your config.xml; you will still have the INTERNET
