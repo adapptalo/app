@@ -13,6 +13,7 @@
 		<link href="kendo/styles/kendo.indexedlistview.css" rel="stylesheet" />
 
      <style type="text/css">
+         .km-scroll-header{background: url(img/pattern9.png) !important;}
           body {
 	background: #000;
 	margin: 0;
@@ -205,7 +206,7 @@ canvas {
 
 	<body>
 
-                <div data-role="view" id="beers-view" data-url="/" data-layout="tabstrip-appearance" data-title="BeerList" data-model="viewModel" class="km-insetcontent">
+                <div data-role="view" id="beers-view" data-url="/" data-layout="tabstrip-appearance" data-title="BeerList" data-model="viewModel" class="km-insetcontent" data-show="showBeersView">
                         <ul id="custom-listview" data-role="indexedlistview" data-bind="source: beers" data-template="beer-list-template" data-fixed-headers="true"></ul>
                 </div>
 
@@ -470,6 +471,10 @@ canvas {
                             } else {
                               marker.setAnimation(google.maps.Animation.BOUNCE);
                             }
+                        }
+                        function showBeersView(e) {
+                            //alert("showBeersView");
+                            setTimeout(function () {$(".km-indexedlistview").data("kendoMobileIndexedListView").refresh();}, 1);
                         }
 		</script>
                 <script>
