@@ -296,7 +296,21 @@ canvas {
         <!-- add the google maps scripts -->
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
         <script type="text/javascript">
-            document.addEventListener("deviceready", onDeviceReady, false);
+        
+
+            function isAndroid() {
+              return navigator.userAgent.toLowerCase().indexOf("android") > -1;
+            }
+
+            function isIOS() {
+              return navigator.userAgent.match(/(iPad|iPhone|iPod)/i) != null;
+            }
+            if (isIOS() || isAndroid()) {
+                  document.addEventListener('deviceready', this.onDeviceReady, false);
+                } else {
+                  this.onDeviceReady();
+                }
+                //document.addEventListener("deviceready", onDeviceReady, false);
             // Cordova esta disponible!
             //
             function onDeviceReady() {
@@ -314,7 +328,8 @@ canvas {
             }
             function error(){
                 alert(' no puedo encontrarte :(');
-            }                   
+            }            
+            
     </script>	
 
     
