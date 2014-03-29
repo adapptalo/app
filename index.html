@@ -1,92 +1,103 @@
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <meta name="viewport" content="width=320; user-scalable=no" />
-        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-        <title>CompassApp</title>
-        <style type="text/css">
-            body {
-                color:#666; margin:0; border:0px;
-            }
-            #title {
-                background:#eee; font-size:1.6em; text-align:center; padding:20px 0px 20px 0px;
-            }
-            #direction {
-                font-size:1.6em; text-align:center; padding:20px 0px 20px 0px;
-            }
-            #compass {
-             position:relative; border:1px solid #000;
-            }
-        </style>
-        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-        <script>
-            var watchId;
-            
-            document.addEventListener("deviceready",
-             function() {
-                    watchId = navigator.compass.watchHeading(
-                        compassSuccess,
-                        compassError,
-                        {frequency: 100}
-                    );
-                }, true
-            );
-                        
-            function compassError() {
-             alert("에러 발생");
-            }
-            
-            function compassSuccess(heading) {
-                heading = Math.round(heading+1);
-             showDirectionInfo(heading);
-             drawCompass(heading);
-            }
+  <head>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>GPSApp</title>
+<link rel="stylesheet" href="main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script type="text/javascript" charset="utf-8" src="phonegap-1.0.0rc2.js"></script>
+          <script type="text/javascript" charset="utf-8">
+          
+          // The watch id references the current `watchHeading`
+          var watchPositionID = null;
+          var watchHeadingID = null;
+          
+          // Wait for PhoneGap to load
+          //
+          document.addEventListener("deviceready", onDeviceReady, false);
+          
+          // PhoneGap is ready
+          //
+          function onDeviceReady() {
+              startWatch();
+          }
+          
+          // Start watching the compass
+          //
+          function startWatch() {
+              // Update compass every 3 seconds
+              var options = { frequency: 1000 };
+              
+              watchHeadingID = navigator.compass.watchHeading(onHeadingSuccess, onHeadingError, options);
+              watchPositionID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
+          }
+          
+          // Stop watching the compass
+          //
+          function stopWatch() {
+              if (watchPositionID) {
+                  navigator.geolocation.clearPosition(watchPositionID);
+                  watchPositionID = null;
+              }
+          }
+              
+              function onHeadingSuccess(heading) {
+                  document.getElementById('heading').innerHTML = heading;
+              }
+              function onHeadingError() {
+                  alert('onHeadingError!');
+              }
+          
+          // onSuccess: Get the current heading
+          //
+          function onPositionSuccess(position) {
+              
+              /*alert(
+'Latitude: ' + position.coords.latitude + '<br />' +
+'Longitude: ' + position.coords.longitude + '<br />' +
+'Altitude: ' + position.coords.altitude + '<br />' +
+'Accuracy: ' + position.coords.accuracy + '<br />' +
+'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
+'Heading: ' + position.coords.heading + '<br />' +
+'Speed: ' + position.coords.speed + '<br />' +
+'Timestamp: ' + new Date(position.timestamp) + '<br />');*/
+              //document.getElementById('heading').innerHTML = position.coords.heading;
+              document.getElementById('speed').innerHTML = position.coords.speed;
+              document.getElementById('altitude').innerHTML = position.coords.altitude;
+              document.getElementById('coordinates').innerHTML = position.coords.latitude + '<br />' + position.coords.longitude;
+              
+          }
+          
+          // onError: Failed to get the heading
+          //
+          function onPositionError() {
+              alert('onPositionError!');
+          }
+          
+          </script>
 
-            function showDirectionInfo(heading) {
-                document.getElementById("direction").innerHTML = heading + "도";
-            }
-            
-            function drawCompass(heading) {
-                var ctx = document.getElementById("compass").getContext("2d");
-                
-                // context 초기화하기
-                ctx.clearRect(0, 0, 320, 320);
-                
-                // 화살표 그리기
-                ctx.save();
-                ctx.translate(160, 160);
-                ctx.font = "10pt Arial";
-                ctx.rotate(-(Math.PI/180) * (90 + heading));
-                var increaseNum = 10;
-                for(var i=0; i<360; i+=increaseNum) {
-                    ctx.rotate( ((Math.PI/180) * increaseNum) );
-                    
-                    if(i%90 != 0)
-                     ctx.fillStyle='rgb(60,60,60)';
-                    else
-                     ctx.fillStyle='rgb(255,0,0)';
-                    ctx.fillText("- " + i, 100, 0);
-                    
-                    if(i == 0) {
-                        ctx.fillStyle='rgb(0,0,0)';
-
-                        ctx.beginPath();
-                        ctx.moveTo(-30, 0);
-                        ctx.lineTo(0, -10);
-                        ctx.lineTo(70, 0);
-                        ctx.lineTo(0, 10);
-                        ctx.lineTo(-30, 0);
-                        ctx.closePath();
-                        ctx.fill();
-                    }
-                }
-                ctx.restore();
-            }
-        </script>
-    </head>
-    <body>
-        <div id=title>나침반 애플리케이션</div>
-        <div id=direction>0도</div>
-        <canvas id=compass width=320 height=320></canvas>
-    </body>
+  </head>
+  <body onload="init()" id="stage" class="theme">
+    <div class="info" onclick="">
+        <div class="title">Heading</div>
+        <div class="data" id="heading">219</div>
+    </div>
+    <div class="info" onclick="">
+        <div class="title">Course</div>
+        <div class="data" id="course">294</div>
+    </div>
+    <div class="info large" onclick="">
+        <div class="title">Speed</div>
+        <div class="data" id="speed">64.3 kph</div>
+    </div>
+    <div class="info large" onclick="">
+        <div class="title">Coordinates</div>
+        <div class="data" id="coordinates">S036 41.487'<br/>E146 54.452'<br/>47m</div>
+    </div>
+    <div class="info large" onclick="">
+        <div class="title">Altitude</div>
+        <div class="data" id="altitude">313 +-70m</div>
+    </div>
+  </body>
 </html>
+
